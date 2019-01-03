@@ -63,7 +63,6 @@ function spotifyThisSong(song = "All the Small Things") {
         } else {
             //Artist(s)
             console.log(`Artist(s): ${data.tracks.items[0].artists[0].name}`);
-            
             //The song's name
             console.log(`Song: ${data.tracks.items[0].name}`);
             //A preview link of the song from Spotify
@@ -90,7 +89,7 @@ function movieThis(movie) {
             if (movie === undefined) {
                 movieThis(movie = "Mr. Nobody");
                 console.log(`If you haven't watched "Mr. Nobody," then you should: http://www.imdb.com/title/tt0485947/
-It's on Netflix!`) 
+It's on Netflix! ${"\n"}`) 
             } else {
                 // Title of the movie.
                 console.log(`Movie: ${response.data.Title}`);
