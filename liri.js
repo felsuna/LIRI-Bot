@@ -127,7 +127,7 @@ Actors: ${response.data.Actors} ${"\n"}
 function doWhatItSays() {
     // console.log("running do-what program")
     fs.readFile("random.txt", "utf8", function(err, data){
-       var dataArray = data.split(",")
+       const dataArray = data.split(",")
        if (dataArray[0] === "spotify-this-song"){
            spotifyThisSong(dataArray[1]);
        }
