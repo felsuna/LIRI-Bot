@@ -4,6 +4,7 @@ const keys = require("./keys");
 const axios = require("axios");
 const Spotify = require("node-spotify-api")
 const moment = require("moment");
+const fs = require("fs");
 
 const spotify = new Spotify(keys.spotify);
 const programToRun = process.argv[2];
@@ -15,7 +16,7 @@ switch (programToRun) {
         concertThis(action);
         break;
     case "spotify-this-song":
-        spotifyThisSong();
+        spotifyThisSong(action);
         break;
     case "movie-this":
         movieThis(action);
@@ -44,26 +45,42 @@ function concertThis(artist = "Incubus") {
             console.log(`Location: ${response.data[0].venue.city}, ${response.data[0].venue.region} ${response.data[0].venue.country}`);
             // Date of the Event (use moment to format this as "MM/DD/YYYY")
             console.log(`Date: ${moment(response.data[0].datetime).format('MM/DD/YYYY')}`);
+
+            fs.appendFile("log.txt", `
+Artist: ${response.data[0].lineup[0]} ${"\n"}
+Venue: ${response.data[0].venue.name} ${"\n"}
+Location: ${response.data[0].venue.city}, ${response.data[0].venue.region} ${response.data[0].venue.country} ${"\n"}
+Date: ${moment(response.data[0].datetime).format('MM/DD/YYYY')}
+-----------------------------------------------------------------------                
+                            ` , function(error, result){});
         })
 }
 
-function spotifyThisSong() {
-    Spotify.search({ type: 'track', query: 'All the Small Things' }, function (err, data) {
+function spotifyThisSong(song = "All the Small Things") {
+    spotify.search({ type: 'track', query: song }, function (err, data) {
         if (err) {
             return console.log('Error occurred: ' + err);
         } else {
             //Artist(s)
-            console.log(`Artist(s): `);
+            console.log(`Artist(s): ${data.tracks.items[0].artists[0].name}`);
+            
             //The song's name
-            console.log(`Song: `);
+            console.log(`Song: ${data.tracks.items[0].name}`);
             //A preview link of the song from Spotify
-            console.log(`Preview song: `);
+            console.log(`Preview song: ${data.tracks.items[0].external_urls.spotify}`);
             //The album that the song is from
-            console.log(`Album: `);
-        }
+            console.log(`Album: ${data.tracks.items[0].album.name}`);
 
-        console.log(data);
+            fs.appendFile("log.txt", `
+Artist(s): ${data.tracks.items[0].artists[0].name} ${"\n"}
+Song: ${data.tracks.items[0].name} ${"\n"}
+Preview song: ${data.tracks.items[0].external_urls.spotify} ${"\n"}
+Album: ${data.tracks.items[0].album.name}
+-----------------------------------------------------------------------                
+                ` , function(error, result){});
+        }      
     });
+
 }
 
 function movieThis(movie) {
@@ -91,63 +108,28 @@ It's on Netflix!`)
                 console.log(`Plot: ${response.data.Plot}`);
                 // Actors in the movie.
                 console.log(`Actors: ${response.data.Actors}`);
+
+                fs.appendFile("log.txt", `
+Movie: ${response.data.Title} ${"\n"}
+Year: ${response.data.Year} ${"\n"}
+${response.data.Ratings[0].Source}: ${response.data.Ratings[0].Value} ${"\n"}
+${response.data.Ratings[1].Source}: ${response.data.Ratings[1].Value} ${"\n"}
+Produced: ${response.data.Country} ${"\n"}
+Language: ${response.data.Language} ${"\n"}
+Plot: ${response.data.Plot} ${"\n"}
+Actors: ${response.data.Actors} ${"\n"}
+-----------------------------------------------------------------------                
+                ` , function(error, result){});
             }
         })
 }
 
 function doWhatItSays() {
-    console.log("running do-what program")
+    // console.log("running do-what program")
+    fs.readFile("random.txt", "utf8", function(err, data){
+       var dataArray = data.split(",")
+       if (dataArray[0] === "spotify-this-song"){
+           spotifyThisSong(dataArray[1]);
+       }
+    })
 }
-
-//### BONUS
-
-//* In addition to logging the data to your terminal/bash window, output the data to a .txt file called `log.txt`.
-
-//* Make sure you append each command you run to the `log.txt` file. 
-
-//* Do not overwrite your file each time you run a command.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// concert-this command
-// if (programToRun === "concert-this") {
-//     concertThis(action);
-//     // spotify-this command
-// } else if (programToRun === "spotify-this-song") {
-//     spotifyThisSong();
-//     // movie-this command
-// } else if (programToRun === "movie-this") {
-//     movieThis();
-//     // do-what-it-says command
-// } else if (programToRun === "do-what-it-says") {
-//     doWhatItSays();
-// } else {
-//     console.log("I don't know what you're doing!")
-// }
