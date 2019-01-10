@@ -17,3 +17,8 @@ The commands using the API's are:
 
 * do-what-it-says
     - https://developer.spotify.com/documentation/web-api/
+
+See demo:
+
+        LIRI-Bot/liri_bot.gif
+      
