@@ -19,6 +19,5 @@ The commands using the API's are:
     - https://developer.spotify.com/documentation/web-api/
 
 See demo:
-
-        LIRI-Bot/liri_bot.gif
+![alt-text]https://github.com/felsuna/LIRI-Bot/blob/master/liri_bot.gif
       
