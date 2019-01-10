@@ -88,7 +88,7 @@ function movieThis(movie) {
         .then(function (response) {
             if (movie === undefined) {
                 movieThis(movie = "Mr. Nobody");
-                console.log(`If you haven't watched "Mr. Nobody," then you should: http://www.imdb.com/title/tt0485947/
+                console.log(`If you haven't watched "Mr. Nobody", then you should: http://www.imdb.com/title/tt0485947/
 It's on Netflix! ${"\n"}`) 
             } else {
                 // Title of the movie.
@@ -124,7 +124,6 @@ Actors: ${response.data.Actors} ${"\n"}
 }
 
 function doWhatItSays() {
-    // console.log("running do-what program")
     fs.readFile("random.txt", "utf8", function(err, data){
        const dataArray = data.split(",")
        if (dataArray[0] === "spotify-this-song"){
